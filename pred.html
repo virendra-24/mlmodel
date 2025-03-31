@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Fare Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-md w-96">
+        <h2 class="text-xl font-bold mb-4 text-center">Flight Fare Prediction</h2>
+        
+        <label class="block mb-2">Airline:</label>
+        <select id="airline" class="w-full p-2 border rounded">
+            <option value="0">Airline A</option>
+            <option value="1">Airline B</option>
+            <option value="2">Airline C</option>
+        </select>
+        
+        <label class="block mt-4 mb-2">Class:</label>
+        <select id="class" class="w-full p-2 border rounded">
+            <option value="0">Economy</option>
+            <option value="1">Business</option>
+            <option value="2">First Class</option>
+        </select>
+        
+        <label class="block mt-4 mb-2">Total Stops:</label>
+        <select id="stops" class="w-full p-2 border rounded">
+            <option value="0">Non-stop</option>
+            <option value="1">1 Stop</option>
+            <option value="2">2+ Stops</option>
+        </select>
+        
+        <label class="block mt-4 mb-2">Journey Day:</label>
+        <select id="journeyDay" class="w-full p-2 border rounded">
+            <option value="0">Monday</option>
+            <option value="1">Tuesday</option>
+            <option value="2">Wednesday</option>
+            <option value="3">Thursday</option>
+            <option value="4">Friday</option>
+            <option value="5">Saturday</option>
+            <option value="6">Sunday</option>
+        </select>
+        
+        <label class="block mt-4 mb-2">Duration (in hours):</label>
+        <input type="number" id="duration" class="w-full p-2 border rounded" step="0.1" placeholder="Enter duration">
+        
+        <label class="block mt-4 mb-2">Days Left Before Journey:</label>
+        <input type="number" id="daysLeft" class="w-full p-2 border rounded" placeholder="Enter days left">
+        
+        <button onclick="predictFare()" class="w-full mt-4 bg-blue-500 text-white p-2 rounded">Predict Fare</button>
+        
+        <h3 id="result" class="text-center mt-4 text-lg font-semibold"></h3>
+    </div>
+
+    <script>
+        function predictFare() {
+            const data = {
+                Airline: parseInt(document.getElementById("airline").value),
+                Class: parseInt(document.getElementById("class").value),
+                Total_stops: parseInt(document.getElementById("stops").value),
+                Journey_day: parseInt(document.getElementById("journeyDay").value),
+                Duration_in_hours: parseFloat(document.getElementById("duration").value),
+                Days_left: parseInt(document.getElementById("daysLeft").value)
+            };
+            
+            fetch("https://your-api-url.com/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = "Estimated Fare: $" + data.predicted_fare;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>
